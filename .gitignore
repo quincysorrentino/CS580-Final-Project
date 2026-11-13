@@ -1,0 +1,11 @@
+# Webots local/GUI state
+worlds/.*.wbproj
+worlds/.*.jpg
+
+# Python
+__pycache__/
+*.pyc
+
+# Compiled controllers (if anyone writes C/C++)
+controllers/*/build/
+controllers/*/*.o

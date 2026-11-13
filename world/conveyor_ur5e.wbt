@@ -1,0 +1,156 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/ThreadMetalPlate.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/CorrugatedMetal.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/GlossyPaint.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/factory/conveyors/protos/ConveyorBelt.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/factory/containers/protos/PlasticCrate.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/universal_robots/protos/UR5e.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/devices/robotiq/protos/RobotiqEPickGripper.proto"
+
+WorldInfo {
+  info [
+    "UR5e + Robotiq EPick vacuum gripper sorting parts off a conveyor belt."
+  ]
+  title "UR5e Conveyor Sorting"
+  basicTimeStep 16
+  contactProperties [
+    ContactProperties {
+      coulombFriction [
+        0.8
+      ]
+      bounce 0.05
+    }
+  ]
+}
+Viewpoint {
+  orientation 0.24530228254835873 0.22190206480831962 -0.9437087812510645 1.7468
+  position -0.35 3.2 2.35
+  exposure 1.4
+}
+TexturedBackground {
+  texture "factory"
+}
+TexturedBackgroundLight {
+  texture "factory"
+}
+Floor {
+  size 8 6
+  appearance ThreadMetalPlate {
+  }
+}
+DEF CONVEYOR ConveyorBelt {
+  size 4 0.5 0.6
+  appearance CorrugatedMetal {
+    textureTransform TextureTransform {
+      scale 4 1
+    }
+  }
+  borderHeight 0.03
+  speed 0.1
+}
+DEF PEDESTAL Solid {
+  translation 0 -0.55 0.3
+  children [
+    Shape {
+      appearance GlossyPaint {
+        baseColor 0.25 0.27 0.3
+      }
+      geometry DEF PEDESTAL_BOX Box {
+        size 0.3 0.3 0.6
+      }
+    }
+  ]
+  name "pedestal"
+  boundingObject USE PEDESTAL_BOX
+}
+DEF UR5E UR5e {
+  translation 0 -0.55 0.6
+  controller "<none>"
+  selfCollision FALSE
+  toolSlot [
+    RobotiqEPickGripper {
+      rotation 1 0 0 -1.5708
+    }
+    Receiver {
+      channel 1
+    }
+  ]
+}
+DEF BIN_RED PlasticCrate {
+  translation -0.4 -1.05 0
+  name "bin red"
+  size 0.3 0.3 0.25
+  color 0.85 0.15 0.15
+}
+DEF BIN_GREEN PlasticCrate {
+  translation 0 -1.05 0
+  name "bin green"
+  size 0.3 0.3 0.25
+  color 0.15 0.7 0.2
+}
+DEF BIN_BLUE PlasticCrate {
+  translation 0.4 -1.05 0
+  name "bin blue"
+  size 0.3 0.3 0.25
+  color 0.15 0.3 0.85
+}
+DEF OVERHEAD_CAMERA Robot {
+  translation -1 0 1.6
+  children [
+    DEF CAM_POLE Pose {
+      translation 0 0.4 -0.8
+      children [
+        Shape {
+          appearance DEF POLE_PAINT GlossyPaint {
+            baseColor 0.3 0.3 0.3
+          }
+          geometry Cylinder {
+            height 1.6
+            radius 0.02
+          }
+        }
+      ]
+    }
+    DEF CAM_ARM Pose {
+      translation 0 0.2 0.03
+      rotation 1 0 0 1.5708
+      children [
+        Shape {
+          appearance USE POLE_PAINT
+          geometry Cylinder {
+            height 0.4
+            radius 0.015
+          }
+        }
+      ]
+    }
+    Camera {
+      rotation 0 1 0 1.5708
+      children [
+        Shape {
+          appearance GlossyPaint {
+            baseColor 0.1 0.1 0.1
+          }
+          geometry Box {
+            size 0.06 0.05 0.05
+          }
+        }
+      ]
+      fieldOfView 0.9
+      width 320
+      height 240
+      recognition Recognition {
+        frameColor 1 1 0
+      }
+    }
+    Emitter {
+      channel 1
+    }
+  ]
+  name "overhead camera"
+  controller "overhead_vision"
+}
