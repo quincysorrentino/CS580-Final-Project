@@ -1,10 +1,17 @@
 # Webots local/GUI state
-worlds/.*.wbproj
-worlds/.*.jpg
+world/.*.wbproj
+world/.*.jpg
 
 # Python
 __pycache__/
 *.pyc
+.venv/
+# per-machine Python path for Webots (see controllers/overhead_vision/runtime.ini.example)
+controllers/*/runtime.ini
+
+# YOLO weights (auto-downloaded) and debug frames saved by the vision controller
+*.pt
+controllers/overhead_vision/frames/
 
 # Compiled controllers (if anyone writes C/C++)
 controllers/*/build/
