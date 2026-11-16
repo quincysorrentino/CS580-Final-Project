@@ -11,4 +11,17 @@ Project Team: Quincy Sorrentino (qsorrentino@wisc.edu), Yu-Hsin Lin (ylin459@wis
 **Evaluation:** 
 **Experiment 1:** Object Tracking Under Visual Uncertainty: We will introduce different levels of noise and lighting conditions into the camera detections. We will measure object-position estimation error, successful detection rate, and overall sorting accuracy. This experiment will evaluate which environmental conditions the perception task is viable in. 
 
-**Experiment 2:** Picking Algorithm Comparison: Because each pick-and-place cycle takes a fixed amount of time, the arm can’t keep up once objects arrive faster than one per cycle, so it must decide which object to pick next. We will compare two strategies for that decision. The first is greedy (pick whichever object is nearest the gripper). The second is deadline-aware (use the Kalman filter’s estimated position and velocity to predict when each object will leave the workspace, then pick the one leaving soonest). Irregular spacing matters because bunched-up arrivals are what force a choice between targets. We will measure throughput and miss rate. We expect both strategies to perform similarly at low arrival rates. As the rate approaches the robot’s capacity, we expect the greedy strategy to miss more objects and waste more cycles, while the deadline-aware strategy stays closer to the theoretical maximum throughput.
+## Vision setup
+
+The overhead camera controller (`controllers/overhead_vision`) runs a pretrained YOLO11n model and needs a Python venv with ultralytics.
+
+1. From the project root, create the venv:
+   ```
+   python3 -m venv .venv
+   .venv/bin/pip install ultralytics opencv-python numpy
+   ```
+2. Copy `controllers/overhead_vision/runtime.ini.example` to `controllers/overhead_vision/runtime.ini` and set `COMMAND` to the **absolute** path of your `.venv/bin/python` (Webots does not resolve relative paths). `runtime.ini` is git-ignored because the path is different on each machine.
+3. Open `world/conveyor_ur5e.wbt` and press Play. The console should print the ultralytics version, then one line per detection. The YOLO weights (`yolo11n.pt`) download automatically on the first run.
+
+Detections are sent over the Emitter on channel 1 as JSON, one message per object: `{"t": sim_time, "class": "bottle" | "clock" | "cat", "conf": ..., "x": ..., "y": ...}` (world coordinates, meters).
+

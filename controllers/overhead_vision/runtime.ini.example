@@ -1,0 +1,5 @@
+; Copy this file to runtime.ini (same folder) and set COMMAND to the ABSOLUTE
+; path of the project venv's python. Webots does not resolve relative paths here.
+;   python3 -m venv .venv && .venv/bin/pip install ultralytics opencv-python numpy
+[python]
+COMMAND = /absolute/path/to/CS580-Final-Project/.venv/bin/python
