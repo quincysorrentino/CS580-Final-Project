@@ -10,7 +10,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/factory/containers/protos/PlasticCrate.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/universal_robots/protos/UR5e.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/devices/robotiq/protos/RobotiqEPickGripper.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/drinks/protos/WaterBottle.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/drinks/protos/WaterBottle.proto"
 
 WorldInfo {
   info [
@@ -155,7 +155,15 @@ DEF OVERHEAD_CAMERA Robot {
   name "overhead camera"
   controller "overhead_vision"
 }
-# Test parts under the overhead camera (camera sees x -1.35..-0.65 on the belt).
+# Uses the parts below as templates: on Play it copies and removes them, then
+# spawns random copies (duplicates allowed) at the start of the belt.
+DEF PART_SPAWNER Robot {
+  name "part spawner"
+  controller "part_spawner"
+  supervisor TRUE
+}
+# Part templates (camera sees x -1.35..-0.65 on the belt). Their x/y here only
+# matter in the editor; part_spawner keeps their z and rotation.
 # Bottle: PROTO origin is at its base, axis along +Z; rotated to lie along +X,
 # so its center is 0.15 m ahead of the origin, at (-0.80, 0.15).
 DEF PART_BOTTLE WaterBottle {
